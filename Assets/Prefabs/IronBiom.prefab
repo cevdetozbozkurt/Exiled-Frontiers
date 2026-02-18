@@ -6525,7 +6525,7 @@ GameObject:
   - component: {fileID: 2923336587986032162}
   - component: {fileID: 8504617679939792924}
   m_Layer: 0
-  m_Name: IronBinom
+  m_Name: IronBiom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

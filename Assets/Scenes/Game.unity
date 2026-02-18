@@ -186,7 +186,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3843205528380079666, guid: 3b8468b3cb9e63b4b8f7b43ff3ce89dd, type: 3}
       propertyPath: m_Name
-      value: FruitBinom
+      value: FruitBiom
       objectReference: {fileID: 0}
     - target: {fileID: 7117073692625818767, guid: 3b8468b3cb9e63b4b8f7b43ff3ce89dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -283,7 +283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7609056325148313852, guid: 26d3aa30b48360f4b8a8a56ca593c84e, type: 3}
       propertyPath: m_Name
-      value: ForestBinom (1)
+      value: ForestBiom (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -389,7 +389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7609056325148313852, guid: 26d3aa30b48360f4b8a8a56ca593c84e, type: 3}
       propertyPath: m_Name
-      value: ForestBinom
+      value: ForestBiom
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -573,7 +573,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7609056325148313852, guid: 26d3aa30b48360f4b8a8a56ca593c84e, type: 3}
       propertyPath: m_Name
-      value: ForestBinom (2)
+      value: ForestBiom (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -630,7 +630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7260100320557077985, guid: 93bb342a53cdc324399097b967dd63c7, type: 3}
       propertyPath: m_Name
-      value: MixedBinom (1)
+      value: MixedBiom (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -755,8 +755,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 9
   field of view: 20
-  orthographic: 0
-  orthographic size: 1.5
+  orthographic: 1
+  orthographic size: 1
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -780,13 +780,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1681415477}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3420201, y: 0, z: 0, w: 0.9396927}
-  m_LocalPosition: {x: 0, y: 2.37, z: -2.8}
+  m_LocalRotation: {x: 0.27984518, y: 0.3647056, z: -0.11591566, w: 0.88047725}
+  m_LocalPosition: {x: -2.39, y: 2.07, z: -1.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 40, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 35.264, y: 45, z: 0}
 --- !u!114 &1681415481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -841,7 +841,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2754038332044039706, guid: 1c451287b1464ae4c98580b772ccc972, type: 3}
       propertyPath: m_Name
-      value: RockBinom
+      value: RockBiom
       objectReference: {fileID: 0}
     - target: {fileID: 8689581474623239357, guid: 1c451287b1464ae4c98580b772ccc972, type: 3}
       propertyPath: m_LocalPosition.x
@@ -898,7 +898,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6464887365057268764, guid: 280cab7cf24f31f4684ed2b19c95c470, type: 3}
       propertyPath: m_Name
-      value: IronBinom
+      value: IronBiom
       objectReference: {fileID: 0}
     - target: {fileID: 8563789565187012356, guid: 280cab7cf24f31f4684ed2b19c95c470, type: 3}
       propertyPath: m_LocalPosition.x
@@ -955,7 +955,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2754038332044039706, guid: 1c451287b1464ae4c98580b772ccc972, type: 3}
       propertyPath: m_Name
-      value: RockBinom (1)
+      value: RockBiom (1)
       objectReference: {fileID: 0}
     - target: {fileID: 8689581474623239357, guid: 1c451287b1464ae4c98580b772ccc972, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1166,7 +1166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7260100320557077985, guid: 93bb342a53cdc324399097b967dd63c7, type: 3}
       propertyPath: m_Name
-      value: MixedBinom
+      value: MixedBiom
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

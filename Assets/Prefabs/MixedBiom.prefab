@@ -16015,7 +16015,7 @@ GameObject:
   - component: {fileID: 206530823941936433}
   - component: {fileID: 3613144970984926203}
   m_Layer: 0
-  m_Name: MixedBinom
+  m_Name: MixedBiom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
