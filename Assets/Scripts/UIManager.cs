@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 public class UIManager : MonoBehaviour
 {
     private PlayerInputActions inputActions;
@@ -12,6 +13,10 @@ public class UIManager : MonoBehaviour
     public GameObject pageCraft;
     public GameObject pageBuild;
 
+    [Header("Inventory Drawing")]
+    public GameObject itemSlotPrefab;
+    public Transform inventoryGrid;
+
     private void Awake()
     {
         inputActions = new PlayerInputActions();
@@ -20,7 +25,6 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Inventory.Enable();
-
         inputActions.Inventory.ToggleInventory.performed += ToggleInventoryUI;
     }
 
@@ -40,6 +44,35 @@ public class UIManager : MonoBehaviour
     {
         bool isActive = inventoryUIPanel.activeSelf;
         inventoryUIPanel.SetActive(!isActive);
+
+        if(!isActive)
+        {
+            UpdateInventoryUI();
+        }
+    }
+
+    public void UpdateInventoryUI()
+    {
+
+        for (int i = inventoryGrid.childCount - 1; i >= 0; i--)
+        {
+            Destroy(inventoryGrid.GetChild(i).gameObject);
+        }
+
+        foreach (var item in ResourceManager.Instance.inventory)
+        {
+            if(item.Value > 0) 
+            { 
+                GameObject newSlot = Instantiate(itemSlotPrefab, inventoryGrid, transform);
+
+                TextMeshProUGUI textComp = newSlot.GetComponentInChildren<TextMeshProUGUI>();
+
+                if(textComp != null )
+                {
+                    textComp.text = $"{item.Key}: {item.Value}";
+                }
+            }
+        }
     }
 
     public void ShowInventoryPage()
@@ -47,6 +80,7 @@ public class UIManager : MonoBehaviour
         pageInventory.SetActive(true);
         pageCraft.SetActive(false);
         pageBuild.SetActive(false);
+        UpdateInventoryUI();
     }
 
     public void ShowCraftPage()

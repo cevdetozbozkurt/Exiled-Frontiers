@@ -71,7 +71,13 @@ public class WorkerController : MonoBehaviour
     {
         if(targetResource != null)
         {
-            float distance = Vector3.Distance(transform.position, targetResource.position);
+            Vector3 myPos = transform.position;
+            myPos.y = 0f;
+
+            Vector3 targetPos = targetResource.position;
+            targetPos.y = 0f;
+
+            float distance = Vector3.Distance(myPos, targetPos);
 
             if(distance <= interactionDistance)
             {
@@ -100,6 +106,8 @@ public class WorkerController : MonoBehaviour
         }
         string resourceTag = targetResource.tag;
         bool isMatchingJob = CheckIfMatchingJob(resourceTag);
+        
+        Debug.Log("process basladi...");
 
         float requiredTime = isMatchingJob ? defaultWorkTime : penaltyWorkTime;
         workTimer += Time.deltaTime;
