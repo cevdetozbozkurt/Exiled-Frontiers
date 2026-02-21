@@ -1,6 +1,17 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.UI;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class CraftingRecipe
+{
+    public string resultItemTag; 
+    public string displayName;   
+    public List<ResourceCost> costs; 
+}
+
 public class UIManager : MonoBehaviour
 {
     private PlayerInputActions inputActions;
@@ -16,6 +27,11 @@ public class UIManager : MonoBehaviour
     [Header("Inventory Drawing")]
     public GameObject itemSlotPrefab;
     public Transform inventoryGrid;
+
+    [Header("Crafting Settings")]
+    public List<CraftingRecipe> craftingRecipes; 
+    public GameObject craftSlotPrefab; 
+    public Transform craftGrid; 
 
     private void Awake()
     {
@@ -48,6 +64,7 @@ public class UIManager : MonoBehaviour
         if(!isActive)
         {
             UpdateInventoryUI();
+            UpdateCraftingUI();
         }
     }
 
@@ -75,6 +92,54 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void UpdateCraftingUI()
+    {
+        for (int i = craftGrid.childCount - 1; i >= 0; i--)
+        {
+            Destroy(craftGrid.GetChild(i).gameObject);
+        }
+
+        foreach (var recipe in craftingRecipes)
+        {
+            GameObject newSlot = Instantiate(craftSlotPrefab, craftGrid);
+            TextMeshProUGUI textComp = newSlot.GetComponentInChildren<TextMeshProUGUI>();
+            Button btnComp = newSlot.GetComponent<Button>();
+
+            if (textComp != null)
+            {
+                string costText = "";
+                foreach (var cost in recipe.costs)
+                {
+                    costText += $"{cost.amount} {cost.resourceTag}\n";
+                }
+                textComp.text = $"{recipe.displayName}\nCost:\n{costText}";
+            }
+
+            if (btnComp != null)
+            {
+                
+                bool canCraft = ResourceManager.Instance.HasEnoughResources(recipe.costs);
+                btnComp.interactable = canCraft;
+
+                btnComp.onClick.AddListener(() => CraftItem(recipe));
+            }
+        }
+    }
+
+    private void CraftItem(CraftingRecipe recipe)
+    {
+        if (ResourceManager.Instance.HasEnoughResources(recipe.costs))
+        {
+            ResourceManager.Instance.SpendResources(recipe.costs);
+            ResourceManager.Instance.AddResource(recipe.resultItemTag, 1);
+
+            UpdateInventoryUI();
+            UpdateCraftingUI();
+
+            Debug.Log($"Successfully crafted: {recipe.displayName}");
+        }
+    }
+
     public void ShowInventoryPage()
     {
         pageInventory.SetActive(true);
@@ -88,6 +153,7 @@ public class UIManager : MonoBehaviour
         pageInventory.SetActive(false);
         pageCraft.SetActive(true);
         pageBuild.SetActive(false);
+        UpdateCraftingUI();
     }
 
     public void ShowBuildPage()
@@ -96,4 +162,5 @@ public class UIManager : MonoBehaviour
         pageCraft.SetActive(false);
         pageBuild.SetActive(true);
     }
+
 }

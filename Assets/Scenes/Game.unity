@@ -467,6 +467,21 @@ MonoBehaviour:
   pageBuild: {fileID: 178422075}
   itemSlotPrefab: {fileID: 3026077647871696801, guid: c577abfb8e5bc8b44ac7f92f1b5943ff, type: 3}
   inventoryGrid: {fileID: 2127849060}
+  craftingRecipes:
+  - resultItemTag: WoodWall
+    displayName: Wood Wall
+    costs:
+    - resourceTag: Tree
+      amount: 25
+  - resultItemTag: StoneWall
+    displayName: Stone Wall
+    costs:
+    - resourceTag: Tree
+      amount: 5
+    - resourceTag: Rock
+      amount: 10
+  craftSlotPrefab: {fileID: 671798319268589138, guid: 6d76f3efcdbc4214c969465bdfb4b4d3, type: 3}
+  craftGrid: {fileID: 1010796313}
 --- !u!1 &253824205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1351,13 +1366,14 @@ GameObject:
   - component: {fileID: 1010796313}
   - component: {fileID: 1010796315}
   - component: {fileID: 1010796314}
+  - component: {fileID: 1010796316}
   m_Layer: 5
   m_Name: Page_Craft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1010796313
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1415,6 +1431,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1010796312}
   m_CullTransparentMesh: 1
+--- !u!114 &1010796316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010796312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
+  m_Padding:
+    m_Left: 100
+    m_Right: 100
+    m_Top: 150
+    m_Bottom: 100
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 200, y: 200}
+  m_Spacing: {x: 20, y: 20}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1001 &1126233616
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2601,7 +2641,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 80, y: 80}
+  m_CellSize: {x: 150, y: 150}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 0
   m_ConstraintCount: 2

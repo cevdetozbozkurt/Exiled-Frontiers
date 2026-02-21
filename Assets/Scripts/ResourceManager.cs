@@ -1,6 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[System.Serializable]
+public struct ResourceCost
+{
+    public string resourceTag;
+    public int amount;
+}
+
 public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance { get; private set; }
@@ -31,5 +38,29 @@ public class ResourceManager : MonoBehaviour
     {
         if(inventory.ContainsKey(resourceTag)) return inventory[resourceTag];
         return 0;
+    }
+
+    public bool HasResource(string resourceTag, int requiredAmount)
+    {
+        return inventory.ContainsKey(resourceTag) && inventory[resourceTag] >= requiredAmount;
+    }
+
+    public bool HasEnoughResources(List<ResourceCost> costs)
+    {
+        foreach (var cost in costs)
+        {
+            if (!HasResource(cost.resourceTag, cost.amount)) return false;
+        }
+        return true;
+    }
+
+    public void SpendResources(List<ResourceCost> costs)
+    {
+        if (!HasEnoughResources(costs)) return;
+
+        foreach (var cost in costs)
+        {
+            inventory[cost.resourceTag] -= cost.amount;
+        }
     }
 }

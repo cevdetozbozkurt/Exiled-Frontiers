@@ -14,7 +14,7 @@ public class WorkerController : MonoBehaviour
     public float defaultWorkTime = 2.0f;
     public float penaltyWorkTime = 6.0f;
     public int   defaultYield = 10;
-    public int   penaltyYield = 3;
+    public int   penaltyYield = 5;
 
     private Transform targetResource;
     private bool isWorking = false;
