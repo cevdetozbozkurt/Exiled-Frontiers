@@ -1,0 +1,35 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class ResourceManager : MonoBehaviour
+{
+    public static ResourceManager Instance { get; private set; }
+
+    public Dictionary<string, int> inventory = new Dictionary<string, int>();
+
+    private void Awake()
+    {
+        if (Instance == null) { Instance = this; }
+        else { Destroy(gameObject); }
+    }
+
+    public void AddResource(string resourceTag, int amount)
+    {
+        if (inventory.ContainsKey(resourceTag))
+        {
+            inventory[resourceTag] += amount;
+        }
+        else
+        {
+            inventory.Add(resourceTag, amount);
+        }
+
+        Debug.Log($"Envantere Eklendi: {resourceTag}. Toplam miktar: {inventory[resourceTag]}");
+    }
+
+    public int GetResourceAmount(string resourceTag)
+    {
+        if(inventory.ContainsKey(resourceTag)) return inventory[resourceTag];
+        return 0;
+    }
+}

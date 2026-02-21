@@ -112,7 +112,7 @@ public class WorkerController : MonoBehaviour
             GameObject destroyedResource = targetResource.gameObject;
             targetResource = null;
             isWorking = false;
-
+            ResourceManager.Instance.AddResource(resourceTag, yieldAmount);
             Destroy(destroyedResource);
 
             if (isMatchingJob)
