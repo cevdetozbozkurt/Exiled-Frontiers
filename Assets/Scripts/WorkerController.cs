@@ -20,10 +20,7 @@ public class WorkerController : MonoBehaviour
     private bool isWorking = false;
     private float workTimer = 0f;
 
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         MeshRenderer renderer = GetComponentInChildren<MeshRenderer>();
@@ -66,7 +63,6 @@ public class WorkerController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(targetResource != null)

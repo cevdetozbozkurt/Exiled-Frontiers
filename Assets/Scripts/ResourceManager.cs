@@ -54,6 +54,14 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
+    public void SpendResource(string resourceTag, int amount)
+    {
+        if (HasResource(resourceTag, amount))
+        {
+            inventory[resourceTag] -= amount;
+        }
+    }
+
     public void SpendResources(List<ResourceCost> costs)
     {
         if (!HasEnoughResources(costs)) return;

@@ -316,6 +316,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""GatherAll"",
+                    ""type"": ""Button"",
+                    ""id"": ""d0b63221-cf14-4ba9-83c1-3e0dbfde3b15"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -362,6 +371,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""MousePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7e713189-45f5-418e-88fe-2a1ae002935f"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GatherAll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -383,7 +403,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a297369b-f3e4-459a-9337-7a672fda6fd4"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -407,6 +427,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_PlayerControls_Command = m_PlayerControls.FindAction("Command", throwIfNotFound: true);
         m_PlayerControls_MultiSelectModifier = m_PlayerControls.FindAction("MultiSelectModifier", throwIfNotFound: true);
         m_PlayerControls_MousePosition = m_PlayerControls.FindAction("MousePosition", throwIfNotFound: true);
+        m_PlayerControls_GatherAll = m_PlayerControls.FindAction("GatherAll", throwIfNotFound: true);
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_ToggleInventory = m_Inventory.FindAction("ToggleInventory", throwIfNotFound: true);
@@ -614,6 +635,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerControls_Command;
     private readonly InputAction m_PlayerControls_MultiSelectModifier;
     private readonly InputAction m_PlayerControls_MousePosition;
+    private readonly InputAction m_PlayerControls_GatherAll;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerControls".
     /// </summary>
@@ -641,6 +663,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerControls/MousePosition".
         /// </summary>
         public InputAction @MousePosition => m_Wrapper.m_PlayerControls_MousePosition;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerControls/GatherAll".
+        /// </summary>
+        public InputAction @GatherAll => m_Wrapper.m_PlayerControls_GatherAll;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -679,6 +705,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @MousePosition.started += instance.OnMousePosition;
             @MousePosition.performed += instance.OnMousePosition;
             @MousePosition.canceled += instance.OnMousePosition;
+            @GatherAll.started += instance.OnGatherAll;
+            @GatherAll.performed += instance.OnGatherAll;
+            @GatherAll.canceled += instance.OnGatherAll;
         }
 
         /// <summary>
@@ -702,6 +731,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @MousePosition.started -= instance.OnMousePosition;
             @MousePosition.performed -= instance.OnMousePosition;
             @MousePosition.canceled -= instance.OnMousePosition;
+            @GatherAll.started -= instance.OnGatherAll;
+            @GatherAll.performed -= instance.OnGatherAll;
+            @GatherAll.canceled -= instance.OnGatherAll;
         }
 
         /// <summary>
@@ -895,6 +927,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMousePosition(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "GatherAll" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnGatherAll(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Inventory" which allows adding and removing callbacks.

@@ -31,7 +31,11 @@ public class UIManager : MonoBehaviour
     [Header("Crafting Settings")]
     public List<CraftingRecipe> craftingRecipes; 
     public GameObject craftSlotPrefab; 
-    public Transform craftGrid; 
+    public Transform craftGrid;
+
+    [Header("Build Settings")]
+    public GameObject buildSlotPrefab;
+    public Transform buildGrid;
 
     private void Awake()
     {
@@ -65,7 +69,13 @@ public class UIManager : MonoBehaviour
         {
             UpdateInventoryUI();
             UpdateCraftingUI();
+            UpdateBuildUI();
         }
+    }
+
+    private void CloseUI()
+    {
+        inventoryUIPanel.SetActive(false);
     }
 
     public void UpdateInventoryUI()
@@ -126,6 +136,41 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void UpdateBuildUI()
+    {
+        for (int i = buildGrid.childCount - 1; i >= 0; i--)
+        {
+            Destroy(buildGrid.GetChild(i).gameObject);
+        }
+
+        if (BuildingManager.Instance == null) return;
+
+        foreach (var buildItem in BuildingManager.Instance.buildableObjects)
+        {
+            GameObject newSlot = Instantiate(buildSlotPrefab, buildGrid);
+            TextMeshProUGUI textComp = newSlot.GetComponentInChildren<TextMeshProUGUI>();
+            Button btnComp = newSlot.GetComponent<Button>();
+
+            int ownedAmount = ResourceManager.Instance.GetResourceAmount(buildItem.itemTag);
+
+            if (textComp != null)
+            {
+                textComp.text = $"Build: {buildItem.itemTag}\nOwned: {ownedAmount}";
+            }
+
+            if (btnComp != null)
+            {
+                btnComp.interactable = ownedAmount > 0;
+
+                btnComp.onClick.AddListener(() =>
+                {
+                    BuildingManager.Instance.StartPlacement(buildItem.itemTag);
+                    CloseUI();
+                });
+            }
+        }
+    }
+
     private void CraftItem(CraftingRecipe recipe)
     {
         if (ResourceManager.Instance.HasEnoughResources(recipe.costs))
@@ -135,7 +180,7 @@ public class UIManager : MonoBehaviour
 
             UpdateInventoryUI();
             UpdateCraftingUI();
-
+            UpdateBuildUI();
             Debug.Log($"Successfully crafted: {recipe.displayName}");
         }
     }
@@ -144,6 +189,7 @@ public class UIManager : MonoBehaviour
     {
         pageInventory.SetActive(true);
         pageCraft.SetActive(false);
+        pageBuild.SetActive(true);
         pageBuild.SetActive(false);
         UpdateInventoryUI();
     }
@@ -161,6 +207,7 @@ public class UIManager : MonoBehaviour
         pageInventory.SetActive(false);
         pageCraft.SetActive(false);
         pageBuild.SetActive(true);
+        UpdateBuildUI();
     }
 
 }

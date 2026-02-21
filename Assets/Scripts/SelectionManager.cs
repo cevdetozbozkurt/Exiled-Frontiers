@@ -9,7 +9,7 @@ public class SelectionManager : MonoBehaviour
     public List<WorkerController> selectedWorkers = new List<WorkerController>();
 
     public LayerMask selectableLayer;
-
+    public LayerMask groundLayer;
     private void Awake()
     {
         inputActions = new PlayerInputActions();
@@ -23,6 +23,7 @@ public class SelectionManager : MonoBehaviour
         inputActions.PlayerControls.Select.performed += OnSelectPerformed;
 
         inputActions.PlayerControls.Command.performed += OnCommandPerformed;
+        inputActions.PlayerControls.GatherAll.performed += OnGatherAllPerformed;
     }
 
     private void OnDisable()
@@ -30,6 +31,46 @@ public class SelectionManager : MonoBehaviour
         inputActions.PlayerControls.Select.performed -= OnSelectPerformed;
         inputActions.PlayerControls.Command.performed -= OnCommandPerformed;
         inputActions.PlayerControls.Disable();
+
+        inputActions.PlayerControls.GatherAll.performed -= OnGatherAllPerformed;
+        inputActions.PlayerControls.Disable();
+    }
+
+    private void OnGatherAllPerformed(InputAction.CallbackContext context)
+    {
+        
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+        
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, groundLayer))
+        {
+            Vector3 centerPos = hit.point;
+
+            
+            WorkerController[] allWorkers = FindObjectsByType<WorkerController>(FindObjectsSortMode.None);
+
+            if (allWorkers.Length == 0) return;
+
+            
+            for (int i = 0; i < allWorkers.Length; i++)
+            {
+                if (allWorkers[i] != null)
+                {
+                    Vector3 targetPos = centerPos;
+
+                    if (allWorkers.Length > 1)
+                    {
+                        float angle = i * (Mathf.PI * 1f / allWorkers.Length);
+                        float radius = 1.0f; 
+                        Vector3 offset = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+                        targetPos += offset;
+                    }
+
+                    allWorkers[i].MoveTo(targetPos);
+                }
+            }
+            Debug.Log("All workers gathered to screen center!");
+        }
     }
 
     private void OnSelectPerformed(InputAction.CallbackContext context)
@@ -81,7 +122,7 @@ public class SelectionManager : MonoBehaviour
         Vector2 moursePos = inputActions.PlayerControls.MousePosition.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(moursePos);
 
-        if(Physics.Raycast(ray, out RaycastHit hit))
+        if(Physics.Raycast(ray, out RaycastHit hit, selectableLayer))
         {
             string hitTag = hit.collider.tag;
             Debug.Log($"Sag tiklandi! Vurulan Obje: {hit.collider.gameObject.name}, Tag: {hitTag}");
