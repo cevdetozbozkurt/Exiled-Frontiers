@@ -19,6 +19,8 @@ public class BuildingManager : MonoBehaviour
 
     public float rotationStep = 45f;
 
+    public float gridSize = 2f;
+
     [Header("Buildable Objects Database")]
     public List<BuildableObject> buildableObjects;
 
@@ -74,7 +76,12 @@ public class BuildingManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit hit, 1000f, groundLayer))
         {
-            currentGhost.transform.position = hit.point;
+            float snappedX = Mathf.Round(hit.point.x / gridSize) * gridSize;
+            float snappedZ = Mathf.Round(hit.point.z / gridSize) * gridSize;
+
+            Vector3 snappedPosition = new Vector3(snappedX, hit.point.y, snappedZ);
+
+            currentGhost.transform.position = snappedPosition;
             currentGhost.transform.rotation = Quaternion.Euler(0, currentYRotation, 0);
         }
 

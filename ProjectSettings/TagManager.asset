@@ -13,6 +13,7 @@ TagManager:
   - Gatherer
   - Lumberjack
   - Picker
+  - Building
   layers:
   - Default
   - TransparentFX
