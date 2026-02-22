@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro; 
 
 public class WorkerController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class WorkerController : MonoBehaviour
 
     [Header("Toplama Ayarlari")]
     public float interactionDistance = 0.5f;
+    public float buildInteractionDistance = 2.0f;
     public float defaultWorkTime = 2.0f;
     public float penaltyWorkTime = 6.0f;
     public int   defaultYield = 10;
@@ -20,6 +22,12 @@ public class WorkerController : MonoBehaviour
     private bool isWorking = false;
     private float workTimer = 0f;
 
+    private Transform targetBuildSite;
+    private bool isConstructing = false;
+
+    [Header("UI Settings")]
+    public TextMeshProUGUI roleText;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -28,7 +36,12 @@ public class WorkerController : MonoBehaviour
         {
             mat = renderer.material;
             originColor = mat.color;
-        }      
+        }
+
+        if (roleText != null)
+        {
+            roleText.text = gameObject.tag;
+        }
     }
 
     public void SetSelected(bool selected)
@@ -63,21 +76,58 @@ public class WorkerController : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        if (roleText != null)
+        {
+            roleText.transform.rotation = Camera.main.transform.rotation;
+        }
+    }
+
     void Update()
     {
-        if(targetResource != null)
+        if (targetBuildSite != null)
         {
-            Vector3 myPos = transform.position;
-            myPos.y = 0f;
-
-            Vector3 targetPos = targetResource.position;
-            targetPos.y = 0f;
-
+            Vector3 myPos = transform.position; myPos.y = 0f;
+            Vector3 targetPos = targetBuildSite.position; targetPos.y = 0f;
             float distance = Vector3.Distance(myPos, targetPos);
 
-            if(distance <= interactionDistance)
+            if (distance <= buildInteractionDistance)
             {
-                if(!isWorking)
+                if (!isConstructing)
+                {
+                    agent.ResetPath();
+                    isConstructing = true;
+
+                    ConstructionSite site = targetBuildSite.GetComponent<ConstructionSite>();
+                    if (site != null)
+                    {
+                        site.StartBuilding();
+                        Debug.Log($"{gameObject.name} starts to building!");
+                    }
+                }
+            }
+            else if (isConstructing)
+            {
+                isConstructing = false;
+                agent.SetDestination(targetBuildSite.position);
+            }
+        }
+        else if (isConstructing && targetBuildSite == null)
+        {
+            isConstructing = false;
+            Debug.Log($"{gameObject.name} finished the building.");
+        }
+
+        else if (targetResource != null)
+        {
+            Vector3 myPos = transform.position; myPos.y = 0f;
+            Vector3 targetPos = targetResource.position; targetPos.y = 0f;
+            float distance = Vector3.Distance(myPos, targetPos);
+
+            if (distance <= interactionDistance)
+            {
+                if (!isWorking)
                 {
                     agent.ResetPath();
                     isWorking = true;
@@ -85,12 +135,13 @@ public class WorkerController : MonoBehaviour
                 }
                 ProcessResource();
             }
-            else if(isWorking)
+            else if (isWorking)
             {
                 isWorking = false;
                 agent.SetDestination(targetResource.position);
             }
         }
+
     }
 
     private void ProcessResource()
@@ -176,6 +227,21 @@ public class WorkerController : MonoBehaviour
         else
         {
             Debug.Log($"Ekranda baska {targetTag} bulunamadi. Isci beklemeye gecti.");
+        }
+    }
+
+    public void SetBuildTarget(Transform site)
+    {
+        targetResource = null;
+        isWorking = false;
+
+        targetBuildSite = site;
+        isConstructing = false;
+
+        if (agent != null && targetBuildSite != null)
+        {
+            agent.stoppingDistance = buildInteractionDistance - 0.2f;
+            agent.SetDestination(targetBuildSite.position);
         }
     }
 }

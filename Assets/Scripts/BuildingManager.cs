@@ -79,7 +79,8 @@ public class BuildingManager : MonoBehaviour
             float snappedX = Mathf.Round(hit.point.x / gridSize) * gridSize;
             float snappedZ = Mathf.Round(hit.point.z / gridSize) * gridSize;
 
-            Vector3 snappedPosition = new Vector3(snappedX, hit.point.y, snappedZ);
+            float yOffset = GetPivotToBottomOffset(currentGhost);
+            Vector3 snappedPosition = new Vector3(snappedX, hit.point.y + yOffset, snappedZ);
 
             currentGhost.transform.position = snappedPosition;
             currentGhost.transform.rotation = Quaternion.Euler(0, currentYRotation, 0);
@@ -96,25 +97,36 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
+    private float GetPivotToBottomOffset(GameObject obj)
+    {
+        Renderer renderer = obj.GetComponentInChildren<Renderer>();
+        if (renderer == null) return 0f;
+
+        return obj.transform.position.y - renderer.bounds.min.y;
+    }
+
     private void PlaceBuilding()
     {
         ResourceManager.Instance.SpendResource(currentBuildingData.itemTag, 1);
 
-        Instantiate(currentBuildingData.realPrefab, currentGhost.transform.position, currentGhost.transform.rotation);
+        GameObject siteObj = Instantiate(currentBuildingData.ghostPrefab, currentGhost.transform.position, currentGhost.transform.rotation);
 
-        Debug.Log($"{currentBuildingData.itemTag} placed successfully! Waiting for a builder...");
+        ConstructionSite site = siteObj.AddComponent<ConstructionSite>();
+        site.Initialize(currentBuildingData.realPrefab, 5.0f);
 
-        if (ResourceManager.Instance.GetResourceAmount(currentBuildingData.itemTag) <= 0)
+        AssignBuilderToSite(siteObj.transform);
+        CancelPlacement();
+    }
+
+    private void AssignBuilderToSite(Transform siteTransform)
+    {
+        WorkerController[] allWorkers = FindObjectsByType<WorkerController>(FindObjectsSortMode.None);
+        foreach (var worker in allWorkers)
         {
-            CancelPlacement();
-        }
-        else
-        {
-            UIManager uiManager = FindFirstObjectByType<UIManager>();
-
-            if (uiManager != null)
+            if (worker.CompareTag("Builder"))
             {
-                uiManager.UpdateInventoryUI();
+                worker.SetBuildTarget(siteTransform);
+                break;
             }
         }
     }
@@ -122,10 +134,6 @@ public class BuildingManager : MonoBehaviour
     public void CancelPlacement()
     {
         isPlacing = false;
-        currentBuildingData = null;
-        if (currentGhost != null)
-        {
-            Destroy(currentGhost);
-        }
+        if (currentGhost != null) Destroy(currentGhost);
     }
 }
