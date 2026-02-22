@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class CraftingRecipe
@@ -58,6 +59,14 @@ public class UIManager : MonoBehaviour
     {
         inventoryUIPanel.SetActive(false);
         ShowInventoryPage();
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     private void ToggleInventoryUI(InputAction.CallbackContext context)
